@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>外贸客户工作台</title>
+<style>
+:root{--ink:#17324d;--muted:#627386;--green:#225c86;--line:#dde5ed;--paper:#fff;--canvas:#eff3f7;--accent:#e8f1f8}
+*{box-sizing:border-box}
+html{scroll-padding-top:24px}
+body{margin:0;background:var(--canvas);color:#26384b;font:17px/1.8 'PingFang SC','Microsoft YaHei',Aptos,sans-serif;-webkit-font-smoothing:antialiased}
+[hidden]{display:none!important}
+header{min-height:82px;padding:18px 36px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:20px}
+header>div:first-child{position:relative;padding-left:52px}
+header>div:first-child:before{content:'研';position:absolute;left:0;top:3px;width:38px;height:38px;border-radius:9px;background:var(--ink);color:#fff;display:grid;place-items:center;font-size:19px;font-weight:600}
+header h1{margin:0;font-size:20px;line-height:1.5;letter-spacing:.02em;color:var(--ink)}
+header p{margin:3px 0 0;font-size:12px;color:var(--muted)}
+.badge{font-size:12px;color:var(--muted);align-self:center;margin-right:8px}
+main{max-width:1740px;padding:32px;margin:auto;display:grid;grid-template-columns:306px minmax(0,1fr);gap:30px;align-items:start}
+.input-collapsed main{max-width:1490px;grid-template-columns:minmax(0,1fr)}
+.input-collapsed aside{display:none}
+.panel{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:24px}
+aside{position:sticky;top:24px;max-height:calc(100vh - 48px);overflow:auto;scrollbar-width:thin}
+h2{margin:0 0 16px;color:var(--ink);font-size:18px;font-weight:650}
+label{display:block;font-size:13px;font-weight:600;margin:17px 0 7px}
+input,textarea{width:100%;border:1px solid #cad5e0;border-radius:7px;padding:10px 12px;font:inherit;font-size:14px;color:var(--ink);background:#fff}
+textarea{min-height:120px;resize:vertical}
+input::placeholder,textarea::placeholder{color:#7c8a98}
+button,.button{border:1px solid #ccd8e3;border-radius:7px;background:#fff;color:#294b69;padding:9px 14px;min-height:40px;font:inherit;font-size:13px;font-weight:550;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:7px;touch-action:manipulation}
+button:hover,.button:hover{background:#edf3f8;border-color:#92abc0}
+button:disabled{opacity:.45;cursor:default}
+.primary{background:var(--green);color:#fff;width:100%;border-color:var(--green);font-weight:600;padding:12px;margin-top:20px}
+.primary:hover{background:#194969;color:#fff;border-color:#194969}
+:focus-visible{outline:3px solid #7db5db;outline-offset:3px}
+.hint{font-size:12px;line-height:1.7;color:var(--muted)}
+.divider{border:0;border-top:1px solid var(--line);margin:25px 0}
+section[aria-label="客户研究结果"]{min-width:0;display:grid;grid-template-columns:198px minmax(0,1fr);gap:0 26px;align-items:start}
+.toolbar{grid-column:1/-1;grid-row:1;display:flex;justify-content:space-between;gap:20px;align-items:flex-start;margin:3px 0 14px}
+.toolbar h2{font-size:25px;font-weight:650;letter-spacing:-.025em;margin:0 0 7px}
+.actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+#download:not(:disabled){background:var(--ink);border-color:var(--ink);color:#fff}
+#download:not(:disabled):hover{background:#284f72}
+#sample-note{font-size:12px;color:var(--muted);max-width:720px}
+#status{grid-column:1/-1;grid-row:2;font-size:13px;color:#815b24;margin:0 0 10px}
+#status:empty{display:none}
+#meta{grid-column:1/-1;grid-row:3;font-size:12px;color:var(--muted);margin:0 0 26px;padding-bottom:18px;border-bottom:1px solid var(--line)}
+#meta:empty{display:none}
+#sections{grid-column:1;grid-row:4;position:sticky;top:24px;display:flex;flex-direction:column;flex-wrap:nowrap;gap:4px;margin:0;padding:0 14px 0 0;max-height:calc(100vh - 50px);overflow:auto;scrollbar-width:thin}
+#sections a{flex-shrink:0;text-decoration:none;color:#5d6e80;border-left:3px solid transparent;border-radius:0 7px 7px 0;padding:11px 12px;font-size:13px;line-height:1.65;overflow-wrap:anywhere}
+#sections a:hover{background:#e4ebf2;color:var(--ink)}
+#sections a[aria-current="true"]{background:#dfeaf4;color:#174c76;border-left-color:#225c86;font-weight:650}
+#report{grid-column:2;grid-row:4;min-width:0;width:100%;max-width:1100px;justify-self:center}
+section[aria-label="客户研究结果"]:has(#sections:empty) #report{grid-column:1/-1}
+.card{background:var(--paper);padding:34px 40px 42px;border:1px solid #dce4ec;border-radius:10px;margin-bottom:22px;min-width:0;min-height:300px;overflow-wrap:anywhere;scroll-margin-top:24px;box-shadow:0 3px 18px #17324d04;text-align:justify;text-align-last:start}
+.card h2{font-size:27px;line-height:1.5;font-weight:650;letter-spacing:-.02em;margin:0 0 26px;padding:0 0 20px;border-bottom:1px solid var(--line);text-wrap:balance}
+.card h3{font-size:18px;line-height:1.6;color:var(--ink);margin:30px 0 12px;padding-left:12px;border-left:3px solid #9cb8ce}
+.number{display:none}
+.card p{margin:14px auto;line-height:1.9;max-width:78ch;white-space:normal;text-align:justify;text-align-last:start}
+.card>ul,.card>blockquote{max-width:78ch;margin-left:auto;margin-right:auto}
+.card h2,.card h3{text-align:center;text-align-last:auto}
+.card li,.card blockquote,.card .chart-unit,.card .chart-note{text-align:justify;text-align-last:start}
+.card strong{color:var(--ink);font-weight:650}
+.card ul{padding-left:21px;margin:14px 0}
+.card li{line-height:1.85;margin:10px 0;padding-left:3px}
+.card a{color:#225c86;text-decoration:underline;text-underline-offset:3px}
+.card blockquote{background:#f2f6fa;border-left:3px solid #89a4ba;margin:18px 0 24px;padding:12px 17px;font-size:14px;line-height:1.8;color:#405b71}
+.table-wrap{overflow:auto;margin:18px 0 25px;max-width:100%;border:1px solid var(--line);border-radius:7px}
+.card table{border-collapse:collapse;width:100%;font-size:15px;line-height:1.75}
+.card th,.card td{text-align:justify;text-align-last:start;padding:13px 16px;vertical-align:top;font-variant-numeric:tabular-nums;border-bottom:1px solid #e6ecf2}
+.card th{background:#f0f5f9;color:#34516a;font-size:13px;font-weight:650;white-space:normal;border-bottom:1px solid #d6e1eb}
+.card tr:last-child td{border-bottom:0}
+.card td+td,.card th+th{border-left:1px solid #edf1f5}
+.card tr:nth-child(odd) td{background:#fbfcfd}
+.card td:first-child{color:#34516a}
+.empty{grid-column:1/-1;text-align:left;padding:48px 40px;min-height:280px;border-top:3px solid #225c86;text-wrap:pretty}
+.empty strong{display:block;color:var(--ink);font-size:27px;max-width:22ch}
+.empty p{max-width:42ch;color:var(--muted)}
+.import{font-size:13px}
+details summary{cursor:pointer;font-weight:600}
+footer{grid-column:1/-1;grid-row:5;border-top:1px solid var(--line);padding-top:16px;margin-top:12px;color:var(--muted);font-size:12px;line-height:1.8;max-width:100ch}
+.photo-box{background:#f5f8fb;border:1px dashed #b5c7d6;border-radius:8px;padding:15px;margin:14px 0 20px}
+.photo-box strong{font-size:14px;color:var(--ink)}
+.photo-box label{margin-top:9px;font-size:12px}
+.photo-box input[type=file]{font-size:12px;background:#fff;padding:8px}
+.photo-box button{margin:10px 3px 0 0;font-size:12px;padding:7px 10px}
+#card-preview{width:100%;height:180px;object-fit:contain;background:#e9eff5;border-radius:6px;margin-top:12px}
+#card-status{font-size:12px;color:#627386}
+.confirm-line{display:flex;align-items:flex-start;gap:9px;font-weight:400;line-height:1.7}
+.confirm-line input{width:auto;margin-top:5px}
+#card-text{font-size:13px;min-height:130px}
+.chart{margin:26px 0 30px;padding:22px 0;border-top:1px solid var(--line)}
+.chart h3{border:0;padding:0;margin:0 0 6px}
+.chart-unit,.chart-note{font-size:12px;color:var(--muted)}
+.card .chart-note{max-width:none;margin:12px 0}
+.chart svg{width:100%;height:auto;display:block}
+.chart-data caption{padding:12px 16px;text-align:justify;text-align-last:start;font-size:13px;font-weight:600;color:var(--ink);background:#f0f5f9}
+.mail-body{max-width:76ch;margin:0 auto;text-align:left;text-align-last:start}
+.card .mail-body p,.card .mail-body li,.card .mail-body blockquote{text-align:left;text-align-last:start;white-space:pre-line;line-height:1.8;margin:0 0 20px;max-width:none;hyphens:manual}
+.card .mail-body .mail-subject{font-weight:600;border-bottom:1px solid var(--line);padding-bottom:16px;margin-bottom:24px}
+.chart-error{background:#faf5e9;border-left:3px solid #ad8a42;padding:12px 16px;margin:18px 0;font-size:14px}
+dialog::backdrop{background:#17324d66}
+#settings-dialog{font:inherit;overscroll-behavior:contain}
+#settings-dialog h2{font-size:22px}
+#settings-dialog .primary{width:auto;margin-top:0}
+#settings-dialog .actions{margin-top:20px}
+.skip-link{position:fixed;top:-100px;left:20px;z-index:100;background:#fff;color:#17324d;padding:12px}
+.skip-link:focus{top:12px}
+#file-entry{max-width:1100px;margin:24px auto 0;padding:20px 24px;background:#fff7e8;border:1px solid #dfc695;border-radius:10px}
+#file-entry p{margin:4px 0 12px}
+@media(min-width:1500px){.card{padding:40px 50px 48px}}
+@media(max-width:1250px){main{padding:24px;gap:22px;grid-template-columns:282px minmax(0,1fr)}section[aria-label="客户研究结果"]{grid-template-columns:164px minmax(0,1fr);column-gap:18px}.card{padding:28px}.toolbar{flex-direction:column;gap:12px}.toolbar h2{font-size:24px}}
+@media(max-width:950px){main{display:block;max-width:100%;padding:20px}aside{position:static;max-height:none;margin-bottom:26px}section[aria-label="客户研究结果"]{grid-template-columns:164px minmax(0,1fr)}.toolbar{flex-direction:row;align-items:flex-start}.card{padding:26px}header{padding:16px 22px}.badge{display:none}}
+@media(max-width:650px){header{padding:14px 16px;gap:10px}header h1{font-size:17px}header p{font-size:11px}header>div:first-child{padding-left:44px}header>div:first-child:before{width:32px;height:32px;font-size:16px}main{padding:16px}section[aria-label="客户研究结果"]{display:block}.toolbar{flex-direction:column}.toolbar h2{font-size:23px}#sections{position:static;flex-direction:row;gap:7px;max-height:none;overflow:auto;padding:0 0 12px;margin:0 0 18px}#sections a{border:1px solid #d7e1eb;border-radius:6px;padding:8px 12px;max-width:230px;font-size:12px;white-space:nowrap}#sections a[aria-current="true"]{border-color:#8bacC5}.card{padding:22px 20px}.card h2{font-size:23px}.card p,.card li{font-size:16px}.card table{min-width:520px;font-size:14px}.empty{padding:32px 24px}.empty strong{font-size:24px}.actions button{font-size:12px;padding:8px 11px}.photo-box{max-width:100%}}
+@media print{body{background:#fff;color:#182a3c;font-size:11pt}header,aside,nav,.actions,#status,footer,.skip-link,dialog{display:none!important}main,section[aria-label="客户研究结果"],#report{display:block!important;padding:0;margin:0;max-width:none}.card,.card[hidden]{display:block!important;min-height:0;border:0;box-shadow:none;padding:12px 0;margin:0 0 20px;break-inside:auto}.card h2{font-size:19pt}.card th,.card td{font-size:10pt;padding:8px}.table-wrap{overflow:visible;border:0}.card table{min-width:0}tr,.chart{break-inside:avoid}.chart svg{max-height:280px}}
+</style>
+<header><div><h1>外贸客户工作台</h1><p>从客户资料到合作判断，每个环节独立查看</p></div><div class="actions"><span class="badge">本地界面 · DeepSeek 联网分析</span><button id="settings-open" type="button">连接设置</button></div></header>
+<div id="file-entry" role="alert" hidden><strong>打开方式不对：这是页面文件，还没有连接本地助手。</strong><p>请打开正在运行的助手；如果打不开，先双击同目录的 start.command（Mac）或 start.bat（Windows）。不要直接双击 index.html，也不用重新输入密钥。</p><a class="button" href="http://127.0.0.1:8767/">打开本地助手</a></div>
+<dialog id="settings-dialog" style="max-width:480px;width:calc(100% - 40px);border:1px solid #d7e0ea;border-radius:8px;padding:28px;color:#142b45"><form id="settings-form" autocomplete="off"><h2>DeepSeek 连接设置</h2><p class="hint">密钥用于此电脑上的助手调用 DeepSeek 官方接口，API 费用由你的账户承担。不会加入报告或上传 GitHub。</p><p id="key-state" role="status">正在检查连接配置……</p><label for="api-key">API Key</label><input id="api-key" type="password" autocomplete="off" spellcheck="false" placeholder="粘贴你自己的 API Key"><label class="confirm-line"><input id="remember-key" type="checkbox" checked>保存到本机系统凭据库，下次自动使用</label><p class="hint">支持 macOS 钥匙串、Windows 凭据管理器和 Linux Secret Service；不可用时不会改存明文。不勾选则只在本次运行内存中使用。</p><div class="actions"><button id="key-save" class="primary" type="submit">保存配置</button><button id="key-delete" type="button">删除应用密钥</button><button id="settings-close" type="button">关闭</button></div><p id="key-feedback" class="hint" role="status"></p></form></dialog>
+<a class="skip-link" href="#report-title">跳到研究报告</a>
+<main><aside class="panel" id="customer-input"><form id="form"><h2>客户资料</h2><div class="photo-box"><strong>名片照片</strong><label for="card-file">拍照 / 上传名片（JPG、PNG、WebP，≤8MB）</label><input type="file" id="card-file" accept="image/jpeg,image/png,image/webp" capture="environment"><img id="card-preview" alt="你上传的名片预览" hidden><button type="button" id="recognize" disabled>识别名片文字</button><button type="button" id="clear-card">移除照片</button><p class="hint">点击识别后，照片会发送给 DeepSeek 处理并计费。识别后请确认再研究；照片不写入磁盘或报告暂存。</p><p id="card-status" role="status">正在检查名片识别服务……</p><div id="card-review" hidden><label for="card-text">识别内容（可修正）</label><textarea id="card-text"></textarea><label class="confirm-line"><input type="checkbox" id="card-confirm">我已核对名片信息及下方公司名称</label></div></div><label for="company">公司名称 *</label><input id="company" required maxlength="200" placeholder="可手动输入，或识别名片后填写"><label for="country">国家或地区</label><input id="country" placeholder="例如 Norway"><label for="website">公司官网</label><input id="website" placeholder="https://..."><label for="product">我方产品与供货优势</label><textarea id="product" placeholder="填写产品、规格、供货量和目标市场"></textarea><label class="confirm-line"><input type="checkbox" id="refresh-evidence">重新获取公开资料</label><p class="hint">6小时内重复研究可复用资料；勾选重新获取会增加检索费用。数据采集时间列在报告末尾。</p><button class="primary" id="go">生成详细尽调报告</button><p class="hint">详细研究会增加检索和输出量，消耗自己的 DeepSeek API 额度。重要事实仍需人工核验。</p></form>
+<hr class="divider"><details class="import"><summary>查看已有报告</summary><label for="import">导入 Markdown 或文本报告</label><input type="file" id="import" accept=".md,.txt"><label for="paste-report">或粘贴已有报告</label><textarea id="paste-report" placeholder="粘贴报告全文，无需重新调用 API"></textarea><button id="paste-show" type="button">按章节整理</button><button id="demo" type="button">查看分栏示例</button><p class="hint">示例只演示布局，不是真实调查。报告暂存在本标签页，关闭标签页后可能清除。</p></details></aside>
+<section aria-label="客户研究结果"><div class="toolbar"><div><h2 id="report-title" tabindex="-1">客户尽调与开发报告</h2><div id="sample-note"></div></div><div class="actions"><button id="toggle-input" aria-expanded="true" aria-controls="customer-input">收起客户资料</button><button id="download" disabled>下载报告</button><button id="print" disabled>打印 / PDF</button></div></div><div id="status" role="status"></div><div id="meta"></div><nav id="sections" aria-label="报告章节"></nav><div id="report" aria-live="polite"><div class="panel empty"><strong>按章节阅读完整的客户档案</strong><p>输入公司名，或上传名片确认识别结果。公司档案、合作判断与开发材料会分章节呈现。</p>结论与分级 · 公司实体 · 财报表格 · 产品匹配 · 海关边界 · 英文开发 · 核验清单</div></div><footer>来源链接与模型文字本身不等于已核实事实。公开资料不保证覆盖完整的公司进出口记录；规则校验与人工事实核验分别列示。</footer></section></main>
+<script>
+'use strict';
+function splitReport(raw){
+ const sections=[];let current={title:'研究说明',lines:[]};
+ for(const line of String(raw).replace(/\r\n/g,'\n').split('\n')){
+  const m=line.match(/^\s*#{2,4}\s+(.+?)\s*#*$/);
+  if(m && (/^\s*##\s/.test(line)||/开发邮件|会议提纲|会后.*邮件|跟进.*邮件/.test(m[1]))){if(current.lines.some(x=>x.trim()))sections.push(current);current={title:m[1].replace(/\*\*/g,''),lines:[]};}
+  else if(/^\s*#\s+/.test(line)){if(current.title!=='研究说明')current.lines.push(line.replace(/^\s*#\s+/,''));}
+  else current.lines.push(line);
+ }
+ if(current.lines.some(x=>x.trim()))sections.push(current);
+ return sections.filter(s=>s.lines.some(x=>x.trim()&&!/^\s*---+\s*$/.test(x)));
+}
+function sourceUrls(raw){return [...new Set((String(raw).match(/https?:\/\/[^\s<>"'）\]，；]+/g)||[]).map(x=>x.replace(/[).,;]+$/,'')))];}
+function prepareReport(raw){
+ let text=String(raw),first=text.search(/^##\s*1[.、．]\s+/m);if(first>=0)text=text.slice(first);
+ let sources=false;return text.split('\n').map(line=>{if(/^##\s/.test(line))sources=/来源|证据清单/.test(line);if(sources&&line.trim().startsWith('|'))line=line.split('|').map(cell=>{const value=cell.trim();return !/\.\.\.|…/.test(value)&&/^(?:[A-Za-z0-9-]+\.)+[A-Za-z]{2,}\/[^\s|<>]*$/.test(value)?' https://'+value+' ':cell;}).join('|');return line;}).join('\n');
+}
+function appendInline(parent,text){
+ const re=/(\*\*([^*]+)\*\*|\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)|https?:\/\/[^\s<>"'）\]，；]+)/g;
+ let last=0,m;
+ while((m=re.exec(text))){parent.append(document.createTextNode(text.slice(last,m.index)));let el;
+  if(m[2]){el=document.createElement('strong');el.textContent=m[2];}
+  else{el=document.createElement('a');const url=(m[4]||m[0]).replace(/[.,;]+$/,'');el.href=url;el.textContent=m[3]||url;el.target='_blank';el.rel='noopener noreferrer';}
+  parent.append(el);last=re.lastIndex;
+ }parent.append(document.createTextNode(text.slice(last)));
+}
+function fillBody(container,lines){
+ const extracted=extractCharts(lines);lines=extracted.lines;
+ let list=null,table=null;
+ for(const original of lines){const line=original.trim();if(!line||/^---+$/.test(line)){list=null;table=null;continue;}
+  const marker=line.match(/^\u0000CHART(\d+)\u0000$/);if(marker){container.append(renderChart(extracted.charts[Number(marker[1])]||{}));list=null;table=null;continue;}
+  if(line.startsWith('```'))continue;
+  if(/^#{3,4}\s/.test(line)){const h=document.createElement('h3');appendInline(h,line.replace(/^#{3,4}\s+/,''));container.append(h);list=null;table=null;continue;}
+  if(/^\|?\s*:?-{3,}/.test(line)&&line.includes('|'))continue;
+  if(line.startsWith('|')&&line.endsWith('|')){if(!table){const wrap=document.createElement('div');wrap.className='table-wrap';table=document.createElement('table');wrap.append(table);container.append(wrap);}const row=document.createElement('tr');for(const cell of line.slice(1,-1).split('|')){const td=document.createElement(table.children.length?'td':'th');appendInline(td,cell.trim());row.append(td);}table.append(row);list=null;continue;}
+  table=null;const item=line.match(/^(?:[-*]|\d+[.、])\s+(.+)$/);
+  if(item){if(!list){list=document.createElement('ul');container.append(list);}const li=document.createElement('li');appendInline(li,item[1]);list.append(li);continue;}
+  list=null;const p=document.createElement(line.startsWith('>')?'blockquote':'p');appendInline(p,line.replace(/^>\s?/,''));container.append(p);
+ }
+}
+function isMailSection(title){return /开发邮件|开发信|(?:会后|跟进).*邮件|(?:development|outreach|follow[ -]?up).*\b(?:email|mail)\b/i.test(title);}
+function fillMail(container,lines){
+ const body=document.createElement('div');body.className='mail-body';body.setAttribute('lang','en');
+ for(const block of lines.join('\n').split(/\n\s*\n/)){const text=block.replace(/^---+\s*$/gm,'').trim();if(!text)continue;const p=document.createElement('p');if(/^\**Subject\s*[:：]/i.test(text))p.className='mail-subject';appendInline(p,text);body.append(p);}
+ container.append(body);
+}
+function extractCharts(lines){const text=lines.join('\n'),charts=[];const clean=text.replace(/```chart\s*\n([\s\S]*?)```/g,(_,raw)=>{try{charts.push(JSON.parse(raw));}catch{charts.push({error:'图表数据格式不完整，未绘图。'});}return '\n\u0000CHART'+(charts.length-1)+'\u0000\n';});return {lines:clean.split('\n'),charts};}
+function chartAxis(spec){return spec.axis_type!=='category'&&spec.labels.every(x=>/^(?:(?:FY\s*)?(?:19|20)\d{2}(?:年度?|全年|[./-]\d{1,2}(?:[./-]\d{1,2})?|\s*(?:Q[1-4]|H[12]))?|(?:Q[1-4]|H[12])\s*(?:19|20)\d{2})$/i.test(x.trim()))?'time':'category';}
+function validateChart(spec){return !!spec&&spec.structural_checks==='table-source-v1'&&!/反向|推导|推算|估算|估计|近似|derived|estimated|approx/i.test(spec.note||'')&&['bar','line'].includes(spec.type)&&typeof spec.title==='string'&&typeof spec.unit==='string'&&spec.unit.trim()&&Array.isArray(spec.labels)&&Array.isArray(spec.values)&&spec.labels.length===spec.values.length&&spec.labels.length>=2&&spec.labels.length<=40&&spec.labels.every(x=>typeof x==='string'&&x.length<=60)&&spec.values.every(x=>x===null||Number.isFinite(x))&&spec.values.filter(Number.isFinite).length>=2&&Array.isArray(spec.source_ids)&&spec.source_ids.length>0&&(spec.type!=='line'||chartAxis(spec)==='time');}
+function renderChart(spec){
+ const box=document.createElement('section');box.className='chart';
+ if(!validateChart(spec)){box.className='chart-error';box.textContent=spec.error||'缺少同口径数据、时间、单位或来源标记，未绘制图表。';return box;}
+ const h=document.createElement('h3');h.textContent=spec.title;box.append(h);const unit=document.createElement('div');unit.className='chart-unit';unit.textContent='单位：'+spec.unit;box.append(unit);
+ const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');svg.setAttribute('viewBox','0 0 800 320');svg.setAttribute('role','img');svg.setAttribute('aria-label',spec.title+'，单位'+spec.unit);box.append(svg);
+ const draw=(tag,attrs,text)=>{const n=document.createElementNS('http://www.w3.org/2000/svg',tag);for(const [k,v] of Object.entries(attrs))n.setAttribute(k,String(v));if(text!==undefined)n.textContent=text;svg.append(n);return n;};
+ const nums=spec.values.filter(Number.isFinite),low=Math.min(0,...nums),high=Math.max(0,...nums),range=high-low||1;const y=v=>260-(v-low)/range*215;const count=spec.labels.length,x=i=>70+(i+.5)*690/count;
+ for(let i=0;i<4;i++){const value=low+(range*i/3),yy=y(value);draw('line',{x1:65,y1:yy,x2:775,y2:yy,stroke:'#e5eaf0'});draw('text',{x:57,y:yy+4,'text-anchor':'end',fill:'#64748b','font-size':11},value.toLocaleString(undefined,{maximumFractionDigits:2}));}
+ let last=null;
+ spec.values.forEach((value,i)=>{const xx=x(i);if(i%Math.max(1,Math.ceil(count/8))===0||i===count-1)draw('text',{x:xx,y:285,'text-anchor':'middle',fill:'#64748b','font-size':11},spec.labels[i]);if(value===null){last=null;return;}const yy=y(value),display=value.toLocaleString(undefined,{maximumFractionDigits:4});
+ if(spec.type==='bar'){const width=Math.min(90,480/count);const bar=draw('rect',{x:xx-width/2,y:Math.min(yy,y(0)),width,height:Math.max(1,Math.abs(y(0)-yy)),fill:'#245d91',rx:2});const title=document.createElementNS('http://www.w3.org/2000/svg','title');title.textContent=spec.labels[i]+': '+display+' '+spec.unit;bar.append(title);draw('text',{x:xx,y:yy-9,'text-anchor':'middle',fill:'#142b45','font-size':12},display);}
+ else{if(last)draw('line',{x1:last[0],y1:last[1],x2:xx,y2:yy,stroke:'#245d91','stroke-width':2});const dot=draw('circle',{cx:xx,cy:yy,r:4,fill:'#245d91'});const title=document.createElementNS('http://www.w3.org/2000/svg','title');title.textContent=spec.labels[i]+': '+display+' '+spec.unit;dot.append(title);last=[xx,yy];}});
+ if(spec.note){const note=document.createElement('p');note.className='chart-note';note.textContent=String(spec.note).replace(/https?:\/\/\S+/g,'');box.append(note);}
+ const wrap=document.createElement('div');wrap.className='table-wrap chart-data';const table=document.createElement('table'),caption=document.createElement('caption');caption.textContent=spec.title+' · 对应数据';table.append(caption);const header=document.createElement('tr');for(const text of [chartAxis(spec)==='time'?'报告期 / 日期':'类别',spec.unit]){const cell=document.createElement('th');cell.setAttribute('scope','col');cell.textContent=text;header.append(cell);}table.append(header);spec.labels.forEach((label,i)=>{const row=document.createElement('tr');for(const value of [label,spec.values[i]===null?'未取得':String(spec.values[i])]){const cell=document.createElement('td');cell.textContent=value;row.append(cell);}table.append(row);});wrap.append(table);box.append(wrap);return box;
+}
+function cleanBodyLines(lines){
+ let text=lines.join('\n'),charts=[];text=text.replace(/```chart\s*\n[\s\S]*?```/g,m=>{charts.push(m);return '\u0000CHART'+(charts.length-1)+'\u0000';});
+ text=text.replace(/[（(](?:来源|出处|source)[:：][^\n）)]*[）)]/gi,'').replace(/^\s*(?:\*\*)?(?:来源|出处|Sources?)[:：][^\n]*/gim,'').replace(/\[([^\]]+)\]\(https?:\/\/[^\s)]+\)/g,'$1').replace(/https?:\/\/[^\s<>"'）\]，；|]+/g,'').replace(/\[S\d+\]/g,'').replace(/(^|[^A-Za-z0-9_])S\d+(?:\s*[,，、/]\s*S\d+)*(?![A-Za-z0-9_])/g,'$1');
+ charts.forEach((chart,i)=>{text=text.replace('\u0000CHART'+i+'\u0000',chart);});let sourceColumns=[],inTable=false;return text.split('\n').map(line=>{if(!line.trim().startsWith('|')){sourceColumns=[];inTable=false;return line;}const cells=line.trim().slice(1,-1).split('|');if(!inTable){sourceColumns=cells.map((cell,i)=>/来源|出处|source/i.test(cell)?i:-1).filter(i=>i>=0);inTable=true;}return '|'+cells.filter((_,i)=>!sourceColumns.includes(i)).join('|')+'|';}).filter(line=>!/^\s*[-*]?\s*(?:官网|网站)[:：]\s*$/.test(line));
+}
+function shortLabel(title){return title.replace(/^\d+[.、]\s*/,'').replace(/（.*?）/g,'').replace(/\s*\/.*/,'').slice(0,22);}
+function mergeSupplements(parts){
+ const extra=parts.filter(p=>/Google.*补充|Google.*核验/.test(p.title));
+ const result=parts.filter(p=>!extra.includes(p));
+ for(const part of extra){
+  for(const chunk of part.lines.join('\n').split(/\n\s*\n/)){
+   const lines=cleanBodyLines(chunk.split('\n'));
+   if(!lines.some(line=>line.trim()&&!/^#{1,4}\s/.test(line)))continue;
+   const section=/财报|年报|annual|EBITDA|营收|财务|cash flow/i.test(chunk)?/财报|财务|经营分析/:/海关|进出口|港口|customs/i.test(chunk)?/贸易|海关/:/采购|供应商|supplier|procurement/i.test(chunk)?/产品匹配|合作路径/:/公司|实体|档案/;
+   const target=result.find(p=>section.test(p.title))||result.find(p=>!/来源|检查/.test(p.title));
+   if(target){if(!target.lines.includes('### 补充核验材料'))target.lines.push('','### 补充核验材料');target.lines.push('',...lines);}
+  }
+  const urls=sourceUrls(part.lines.join('\n'));
+  if(urls.length){let ledger=result.find(p=>/来源/.test(p.title));if(!ledger){ledger={title:'来源与访问核验',lines:[]};result.push(ledger);}ledger.lines.push('','### 导入资料链接（尚未重新核验）',...urls.map(url=>'- '+url));}
+ }
+ return result;
+}
+let activeReport='';const $=id=>document.getElementById(id);
+const isLocalFile=location.protocol==='file:';
+function keyState(data){$('key-state').textContent=(data.configured?'已配置，可用于研究。':'尚未配置。')+(data.saved?' 系统凭据库已保存。':'')+(!data.vault_available?' 安全凭据库暂不可用，可选择仅本次使用。':'');}
+$('settings-open').addEventListener('click',async()=>{if(isLocalFile){$('file-entry').hidden=false;return;}$('settings-dialog').showModal();$('key-feedback').textContent='';$('api-key').value='';try{const res=await fetch('/credential-status',{cache:'no-store'});if(!res.ok)throw Error('当前运行的旧服务尚不支持网页设置，请先按说明重启一次助手。');keyState(await res.json());$('key-save').disabled=false;$('key-delete').disabled=false;}catch(error){$('key-state').textContent=error instanceof TypeError?'无法连接本地助手。请确认运行窗口未关闭，并通过 http://127.0.0.1:8767 打开。无需先更换密钥。':error.message;$('key-save').disabled=true;$('key-delete').disabled=true;}});
+$('settings-close').addEventListener('click',()=>{$('api-key').value='';$('settings-dialog').close();});
+$('settings-dialog').addEventListener('close',()=>{$('api-key').value='';});
+$('settings-form').addEventListener('submit',async e=>{e.preventDefault();$('key-save').disabled=true;try{const payload={action:'save',key:$('api-key').value.trim(),remember:$('remember-key').checked};$('api-key').value='';const res=await fetch('/credentials',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});payload.key='';const data=await res.json();if(!res.ok)throw Error(data.error||'配置未保存。');keyState(data);$('key-feedback').textContent=data.saved?'已安全保存到本机。保存不代表已通过联网认证；可继续研究进行验证。':'本次运行可用，关闭助手后需要重新输入。';}catch(error){$('key-feedback').textContent=error.message;}finally{$('key-save').disabled=false;}});
+$('key-delete').addEventListener('click',async()=>{if(!window.confirm('删除本应用保存的密钥？删除后需要重新输入，终端中的其他配置不受影响。'))return;try{const res=await fetch('/credentials',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'delete'})});const data=await res.json();if(!res.ok)throw Error(data.error||'删除失败。');keyState(data);$('key-feedback').textContent=data.environment_configured?'本应用保存的密钥已删除；当前终端另有配置，研究仍可能使用该配置。':'本应用密钥已删除。';}catch(error){$('key-feedback').textContent=error.message;}});
+let cardDataUrl='',cardServiceReady=false;
+function collapseInput(value){document.body.classList.toggle('input-collapsed',value);$('toggle-input').textContent=value?'显示客户资料':'收起客户资料';$('toggle-input').setAttribute('aria-expanded',String(!value));try{sessionStorage.setItem('trade-input-collapsed',String(value));}catch{}}
+function activateChapter(id){for(const card of $('report').querySelectorAll('.card'))card.hidden=id!=='all'&&card.id!==id;for(const link of $('sections').querySelectorAll('a'))link.setAttribute('aria-current',String(link.getAttribute('href')==='#'+id));}
+$('toggle-input').addEventListener('click',()=>collapseInput(!document.body.classList.contains('input-collapsed')));
+function showReport(text,label=''){
+ text=prepareReport(text);activeReport=text;$('report').replaceChildren();$('sections').replaceChildren();$('sample-note').textContent=label;
+ let parts=mergeSupplements(splitReport(text));const sourceParts=parts.filter(p=>/^(?:\d+[.、]\s*)?(?:来源|证据来源)/.test(p.title));parts=parts.filter(p=>!sourceParts.includes(p)).concat(sourceParts);if(!parts.length)parts.push({title:'报告正文',lines:[text]});
+ parts.forEach((part,i)=>{const card=document.createElement('article');card.className='card';card.id='part-'+i;const title=document.createElement('h2');title.textContent=part.title;card.append(title);const isSources=/(?:^|\d[.、]\s*)来源|Google 补充核验/.test(part.title);const lines=isSources?part.lines:cleanBodyLines(part.lines);if(isMailSection(part.title))fillMail(card,lines);else fillBody(card,lines);$('report').append(card);const link=document.createElement('a');link.href='#'+card.id;link.textContent=shortLabel(part.title);link.title=part.title;link.addEventListener('click',e=>{e.preventDefault();activateChapter(card.id);});$('sections').append(link);});
+ const urls=sourceUrls(text);if(urls.length&&!sourceParts.length){const card=document.createElement('article');card.className='card full';card.id='part-sources';const h=document.createElement('h2');h.textContent='来源链接索引（待逐项核验）';card.append(h);const list=document.createElement('ul');urls.forEach(url=>{const li=document.createElement('li');appendInline(li,url);list.append(li);});card.append(list);$('report').append(card);const link=document.createElement('a');link.href='#part-sources';link.textContent='来源索引';link.addEventListener('click',e=>{e.preventDefault();activateChapter('part-sources');});$('sections').append(link);}
+ const all=document.createElement('a');all.href='#all';all.textContent='全部展开';all.addEventListener('click',e=>{e.preventDefault();activateChapter('all');});$('sections').append(all);
+ const first=parts.findIndex(p=>/执行摘要/.test(p.title));activateChapter('part-'+(first>=0?first:Math.max(0,parts.findIndex(p=>p.title!=='研究说明'))));
+ $('meta').textContent=parts.length+' 个完整章节 · '+urls.length+' 个来源链接 · 点击章节切换，独立大幅阅读';$('download').disabled=false;$('print').disabled=false;
+}
+function saveSession(label=''){try{sessionStorage.setItem('trade-report-v2',JSON.stringify({report:activeReport,label,fields:['company','country','website','product'].map(id=>[id,$(id).value])}));}catch{}}
+$('form').addEventListener('submit',async e=>{e.preventDefault();if(cardDataUrl&&!$('card-confirm').checked){$('status').textContent='请先识别并确认名片，或移除照片后仅使用文字研究。';return;}$('go').disabled=true;$('status').textContent='正在收集官方资料并生成详细报告，可能需要数分钟。';try{const res=await fetch('/research',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({company_name:$('company').value,country:$('country').value,website:$('website').value,product:$('product').value,card_text:$('card-confirm').checked?$('card-text').value:'',refresh_evidence:$('refresh-evidence').checked})});const data=await res.json();if(!res.ok)throw Error(data.error||'请求失败');showReport(data.report);saveSession();collapseInput(true);$('status').textContent='报告草稿已生成，程序检查见最后一章；重要事实仍需人工核验。';}catch(err){$('status').textContent='研究失败：'+err.message+'。上一份报告已保留。';}finally{$('go').disabled=false;}});
+$('download').addEventListener('click',()=>{const blob=new Blob([activeReport],{type:'text/markdown;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=($('company').value||'客户研究').replace(/[\\/:*?"<>|]/g,'_')+'-报告.md';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);});
+$('print').addEventListener('click',()=>window.print());
+$('paste-show').addEventListener('click',()=>{const text=$('paste-report').value.trim();if(!text){$('status').textContent='请先粘贴报告。';return;}if(text.length>1000000){$('status').textContent='报告过长，请缩短后再导入。';return;}showReport(text,'已有报告 · 本次仅整理排版，未重新核验');saveSession('已有报告 · 本次仅整理排版，未重新核验');$('status').textContent='已按章节整理，没有调用 API。';});
+$('import').addEventListener('change',async e=>{const file=e.target.files[0];if(!file)return;if(file.size>2*1024*1024){$('status').textContent='文件超过2MB，请导入较小的文本报告。';return;}showReport(await file.text(),'导入报告 · 来源及内容未自动复核');saveSession('导入报告 · 来源及内容未自动复核');$('status').textContent='已将文件按章节拆分，没有调用 API。';});
+$('demo').addEventListener('click',()=>{showReport('# 示例客户报告\n\n布局演示，不是真实调查。\n\n## 公司档案\n公司名称、法律主体和主营业务独立展示。\n\n## 财报与经营\n报告期、财务数据及原文来源分别列出；缺失数据标为待核验。\n\n## 合作判断\n**销售匹配**：待核验。\n**竞争重叠**：单独评价。\n\n## 贸易与海关\n未取得公司级逐票数据时明确说明。\n\n## 英文开发邮件\nSubject: Draft for review\n\n此处展示英文邮件草稿。\n\n## 15分钟会议提纲\n- 0–3分钟：确认身份与目标\n- 3–10分钟：产品和需求\n- 10–15分钟：下一步\n\n## 会后跟进与待办\n- 负责人：待确认\n- 截止日期：待确认','布局示例 · 非真实公司研究');$('status').textContent='这是排版示例，未调用 API。';});
+try{const saved=JSON.parse(sessionStorage.getItem('trade-report-v2')||'null');if(saved&&typeof saved.report==='string'){for(const [id,value] of saved.fields||[])if(['company','country','website','product'].includes(id))$(id).value=value;showReport(saved.report,saved.label);}}catch{}
+try{collapseInput(sessionStorage.getItem('trade-input-collapsed')==='true');}catch{}
+function clearCard(){cardDataUrl='';$('card-file').value='';$('card-preview').hidden=true;$('card-preview').removeAttribute('src');$('card-review').hidden=true;$('card-text').value='';$('card-confirm').checked=false;}
+$('clear-card').addEventListener('click',()=>{clearCard();$('card-status').textContent='已移除照片，可仅用文字输入。';});
+$('card-file').addEventListener('change',async e=>{const file=e.target.files[0];if(!file)return;$('card-confirm').checked=false;$('card-review').hidden=true;cardDataUrl='';$('card-preview').hidden=true;if(file.size>8*1024*1024||!['image/jpeg','image/png','image/webp'].includes(file.type)){$('card-status').textContent='请选择8MB以内的JPG、PNG或WebP名片图片。';return;}try{cardDataUrl=await new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(reader.result);reader.onerror=reject;reader.readAsDataURL(file);});$('card-preview').src=cardDataUrl;$('card-preview').hidden=false;$('card-status').textContent=cardServiceReady?'照片只在本页预览，点击识别后才发送给DeepSeek。':'照片已预览；需重启新版服务才能识别。';}catch{$('card-status').textContent='照片读取失败，请重新选择。';}});
+$('recognize').addEventListener('click',async()=>{if(!cardDataUrl){$('card-status').textContent='请先上传名片照片。';return;}$('recognize').disabled=true;$('card-status').textContent='正在识别名片，请稍候……';try{const res=await fetch('/recognize-card',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({image:cardDataUrl})});const data=await res.json();if(!res.ok)throw Error(data.error||'识别失败');const card=data.card;if(card.company_name)$('company').value=card.company_name;if(card.website)$('website').value=card.website;if(card.country)$('country').value=card.country;$('card-text').value=['公司：'+card.company_name,'联系人：'+card.person,'邮箱：'+card.email,'电话：'+card.phone,'网站：'+card.website,'国家：'+card.country,'原文：'+card.raw_text,'待确认：'+card.uncertain].join('\n');$('card-confirm').checked=false;$('card-review').hidden=false;$('card-status').textContent='识别完成，请核对和修正，再勾选确认；识别结果不证明客户真实或有采购权。';}catch(err){$('card-status').textContent='识别失败：'+err.message;}finally{$('recognize').disabled=!cardServiceReady;}});
+if(isLocalFile){$('file-entry').hidden=false;$('recognize').disabled=true;$('go').disabled=true;$('card-status').textContent='当前是静态页面文件。请点上方“打开本地助手”，无需重新输入密钥。';}
+else fetch('/status').then(async res=>{if(!res.ok)throw Error('old');const data=await res.json();if(!data.card_upload)throw Error('old');cardServiceReady=true;$('recognize').disabled=false;$('card-status').textContent='可上传名片识别，也可仅使用下方文字输入。';}).catch(()=>{$('recognize').disabled=true;$('go').disabled=true;$('card-status').textContent='无法连接新版本地服务。请确认助手运行窗口未关闭，再刷新页面；已有报告仍可查看。';});
+</script></html>

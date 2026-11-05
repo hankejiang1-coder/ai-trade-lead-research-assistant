@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "trade-research": {
+      "command": "/ABSOLUTE/PATH/trade-local/.venv/bin/python",
+      "args": ["/ABSOLUTE/PATH/trade-local/app.py", "--mcp"]
+    }
+  }
+}

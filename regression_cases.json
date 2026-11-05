@@ -1,0 +1,43 @@
+{
+  "checked_on": "2026-11-04",
+  "purpose": "人工从官方资料核对的回归基准，不代表助手已自动生成合格报告",
+  "seller": "中国烟台供应商/出口销售方；三种颗粒NPK 15-15-15、10-10-10、20-20-20合计月供货能力20,000吨；另供颗粒硫酸铵和颗粒氯化铵；样品及检验须双方确认",
+  "cases": [
+    {
+      "id": "nutrien",
+      "company_name": "Nutrien Ltd.",
+      "country": "Canada",
+      "website": "https://www.nutrien.com",
+      "official_result": "https://www.nutrien.com/news/press-releases/nutrien-reports-full-year-2025-results-and-provides-2026-guidance-1741",
+      "benchmark": {"periods": ["FY2024", "FY2025"], "unit": "USD million", "sales": [25972,26885], "net_earnings": [700,2297], "adjusted_ebitda_non_gaap": [5355,6046]},
+      "review": "不得把季度与全年混用；调整后EBITDA不能写成净利润。集团制造与零售业务不能直接证明采购我方产品。"
+    },
+    {
+      "id": "icl",
+      "company_name": "ICL Group Ltd.",
+      "country": "Israel",
+      "website": "https://www.icl-group.com",
+      "official_result": "https://investors.icl-group.com/reports-news-and-events/press-releases/press-releases-details/2026/ICL-Reports-Fourth-Quarter-and-Full-Year-2025-Results/default.aspx",
+      "benchmark": {"periods": ["FY2024", "FY2025"], "unit": "USD million", "sales": [6841,7153], "adjusted_ebitda_non_gaap": [1469,1488], "operating_cash_flow": [1468,1056]},
+      "review": "水溶肥、颗粒肥及原料不是同一采购范围；矿产和特种肥业务不等于采购我方成品的证据。"
+    },
+    {
+      "id": "mosaic",
+      "company_name": "The Mosaic Company",
+      "country": "United States",
+      "website": "https://www.mosaicco.com",
+      "official_result": "https://investors.mosaicco.com/press-releases/default.aspx",
+      "benchmark": null,
+      "review": "已找到官方2025全年及2026季度结果入口，数值尚未逐项建立基准；不得把磷肥/钾肥产销吨位写成公司海关出口吨位。"
+    }
+  ],
+  "acceptance": [
+    "公司实体明确，集团与子公司分开",
+    "官方财务注明期间、单位、币种及指标定义",
+    "未知信息不补造，股价单点不画历史走势",
+    "正文不出现网址，来源只放末尾并可追溯",
+    "竞争重叠与采购证据分开评价，缺证不等于不采购",
+    "开发邮件正文120至180词，会议固定15分钟，会后邮件使用待填写占位",
+    "NPK合计供货量、供应商身份、NH4Cl氮氯属性和条件式质检承诺正确"
+  ]
+}

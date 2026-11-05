@@ -1,0 +1,17 @@
+.venv/
+.local/
+__pycache__/
+*.pyc
+.env
+.env.*
+!.env.example
+*credentials*.json
+*.key
+reports/
+deliverables/
+外贸客户助手.app/
+reference-report.md
+source_hints.json
+# Historical code/report backups are retained locally, excluded from publication.
+app-v*.py
+index-v*.html
